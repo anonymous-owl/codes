@@ -18,7 +18,7 @@ import xgboost as xgb
 
 from FairReg import FairReg
 from evaluation_measures import DP_unfairness, prob_unfairness, unfairness, prob_unfairness_summary, DP_unfairness_summary, prob_risk
-from data_prep import get_lawschool_data, get_communities_data, get_frequencies
+from data_prep import get_lawschool_data, get_communities_data, get_adult_data, get_frequencies
 
 def get_stats(dataset='lawschool', num=10, T=1000, eps = [0.01, 0.01], beta='auto', L='auto',
               TRAIN_SIZE=0.4, UNLAB_SIZE=0.4, TEST_SIZE=0.2, data_scaling=True):
