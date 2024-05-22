@@ -123,7 +123,7 @@ class FairReg:
         return w_ag, w_hist
 
 
-    def SGD3_sc(self, X, w_init, mu_init, M, T, sc = True):
+    def SGD3_sc(self, X, w_init, mu_init, M, T, method, sc = True):
         w = w_init
         new_init = w_init
         mu = mu_init
@@ -136,9 +136,13 @@ class FairReg:
             mu_reg.append(w)
         S1 = int(np.floor(np.log2(M/mu)))
         for s in range(1, S1+1):
-            # w, w_hist = self.SGD_sc(X, w, mu, 3*M, int(np.floor(T/S1)), w_reg, mu_reg)
-            w, w_hist = self.accelerated_grad(X, new_init, mu, M,
-                                              T=int(np.floor(T/S1)), w_reg=w_reg, mu_reg=mu_reg)
+            if method=='accelerated':
+                w, w_hist = self.accelerated_grad(X, new_init, mu, M,
+                                                  T=int(np.floor(T/S1)), w_reg=w_reg, mu_reg=mu_reg)
+            elif method=='sgd':
+                w, w_hist = self.SGD_sc(X, w, mu, 3*M, int(np.floor(T/S1)), w_reg, mu_reg)
+            else:
+                raise Exception('Method not found.')
             new_init = w_init
             mu = 2*mu
             w_reg.append(w)
@@ -151,7 +155,7 @@ class FairReg:
     def SGD3(self, X, w_init, mu, M, T, method='accelerated'):
         return self.SGD3_sc(X, w_init, mu, M + mu, T, sc = False)
 
-    def fit(self, X, beta = 'auto', L = 'auto', history = False):
+    def fit(self, X, beta = 'auto', L = 'auto', history = False, method='accelerated'):
         
         self.N = len(X)
     

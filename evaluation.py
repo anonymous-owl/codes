@@ -38,6 +38,21 @@ def get_stats(dataset='lawschool', num=10, T=1000, eps = [0.01, 0.01], beta='aut
         B=1
         K=2
         p = get_frequencies(S)
+    elif dataset=='adult':
+        X, S, y = get_adult_data()
+        # normalizing data to [0,1]
+        y = y/100
+        #scaling
+        if data_scaling:
+            scaler = MinMaxScaler(feature_range=(-1, 1))
+            y_scaled = scaler.fit_transform(y.values.reshape(-1, 1))
+            y = pd.Series(y_scaled.flatten(), index=y.index)
+        #we take only 2000 samples for comparison
+        sample_size = 2000 
+        X, _, S, _, y ,_ = train_test_split(X, S, y, test_size=1 - sample_size / (len(X)), random_state=42)
+        B=1
+        K=2
+        p = get_frequencies(S)
     elif dataset=='communities':
         X, S, y = get_communities_data()
         if data_scaling:
@@ -118,6 +133,21 @@ def get_risk_unf_wrt_eps(dataset, num, T, eps_list, print_details = True, beta='
             scaler = MinMaxScaler(feature_range=(-1, 1))
             y_scaled = scaler.fit_transform(y.values.reshape(-1, 1))
             y = pd.Series(y_scaled.flatten(), index=y.index)
+        B=1
+        K=2
+        p = get_frequencies(S)
+    elif dataset=='adult':
+        X, S, y = get_adult_data()
+        # normalizing data to [0,1]
+        y = y/100
+        #scaling
+        if data_scaling:
+            scaler = MinMaxScaler(feature_range=(-1, 1))
+            y_scaled = scaler.fit_transform(y.values.reshape(-1, 1))
+            y = pd.Series(y_scaled.flatten(), index=y.index)
+        #we take only 2000 samples for comparison
+        sample_size = 2000 
+        X, _, S, _, y ,_ = train_test_split(X, S, y, test_size=1 - sample_size / (len(X)), random_state=42)
         B=1
         K=2
         p = get_frequencies(S)
@@ -231,6 +261,14 @@ def get_stats_ADW(dataset, num, eps_list, print_details = True,
         p = get_frequencies(S)
     elif dataset=='communities':
         X, S, y = get_communities_data(as_df=True)
+        B=1
+        K=2
+        p = get_frequencies(S)
+    elif dataset=='adult':
+        X_all, S_all, y_all = get_adult_data(as_df=True)
+        sample_size = 2000 #we take only 2000 samples for comparison
+        X, _, S, _, y ,_ = train_test_split(X_all, S_all, y_all, test_size=1 - sample_size / (len(X_all)), random_state=42)
+        y = y/100 # normalizing data to [0,1]
         B=1
         K=2
         p = get_frequencies(S)
