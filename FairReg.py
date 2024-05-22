@@ -153,7 +153,7 @@ class FairReg:
 
 
     def SGD3(self, X, w_init, mu, M, T, method='accelerated'):
-        return self.SGD3_sc(X, w_init, mu, M + mu, T, sc = False)
+        return self.SGD3_sc(X, w_init, mu, M + mu, T, method, sc = False)
 
     def fit(self, X, beta = 'auto', L = 'auto', history = False, method='accelerated'):
         
